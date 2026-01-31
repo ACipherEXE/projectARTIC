@@ -2,3 +2,4 @@ Note: dates, time and etc are handled by this table and not the user punching
 Also that when a studnet ID is deleted that all their logs will disapear
 // insert userID
 INSERT INTO entry_log (studentid) VALUES ('STU001');
+

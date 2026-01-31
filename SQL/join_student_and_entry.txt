@@ -1,0 +1,37 @@
+// Join tables with all columns
+SELECT 
+    s.uuid AS student_uuid,
+    s.firstName,
+    s.lastName,
+    s.emails,
+    s.studentid,
+    s.phoneNumber,
+    s.grade,
+    e.uuid AS entry_uuid,
+    e.date,
+    e.time,
+    e.is_late
+FROM students s
+JOIN entry_log e ON s.studentid = e.studentid;
+
+// Figure out how many times they entered
+SELECT 
+    s.firstName,
+    s.lastName,
+    s.studentid,
+    COUNT(e.uuid) AS total_entries,
+    SUM(CASE WHEN e.is_late THEN 1 ELSE 0 END) AS late_entries
+FROM students s
+LEFT JOIN entry_log e ON s.studentid = e.studentid
+GROUP BY s.uuid, s.firstName, s.lastName, s.studentid;
+
+// Show all students entries even ones that dont have one
+SELECT 
+    s.firstName,
+    s.lastName,
+    s.studentid,
+    e.date,
+    e.time,
+    e.is_late
+FROM students s
+LEFT JOIN entry_log e ON s.studentid = e.studentid;
