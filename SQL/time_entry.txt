@@ -4,3 +4,6 @@ If a student ID does not exsist then it will throw a ERROR as its checking for i
 // insert userID
 INSERT INTO entry_log (studentid) VALUES ('STU001');
 
+//How to edit time of late
+ALTER TABLE entry_log 
+ALTER COLUMN is_late SET DEFAULT (CURRENT_TIME > '08:30:00');
