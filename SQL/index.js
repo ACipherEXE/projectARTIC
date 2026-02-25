@@ -16,10 +16,11 @@ const pool = new Pool({
 });
 
 app.get("/time-entry/:studentId", async (req, res) => {
+  // Takes the student ID from the URL
   const studentId = req.params.studentId;
   try {
     const result = await pool.query(
-      `INSERT INTO entry_log (${studentId}) VALUES ('STU001');`,
+      `INSERT INTO entry_log (studentid) VALUES (${studentId});`,
     );
     res.json(result.rows);
   } catch (err) {
