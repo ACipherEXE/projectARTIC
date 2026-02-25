@@ -12,5 +12,23 @@ const pool = new Pool({
   port: 5432,
   user: "postgres",
   password: "password",
-  database: "projectARTIC ",
+  database: "projectARTIC",
+});
+
+app.get("/time-entry/:studentId", async (req, res) => {
+  const studentId = req.params.studentId;
+  try {
+    const result = await pool.query(
+      `INSERT INTO entry_log (${studentId}) VALUES ('STU001');`,
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
+// --- Start server ---
+app.listen(3001, () => {
+  console.log("API running on http://localhost:3001");
 });
