@@ -15,6 +15,7 @@ const pool = new Pool({
   database: "projectARTIC",
 });
 
+// Enter a student ID and the database will take care of the rest
 app.get("/time-entry/:studentId", async (req, res) => {
   // Takes the student ID from the URL
   const studentId = req.params.studentId;
