@@ -1,0 +1,9 @@
+Note: dates, time and etc are handled by this table and not the user punching
+Also that when a studnet ID is deleted that all their logs will disapear
+If a student ID does not exsist then it will throw a ERROR as its checking for it in student table
+// insert userID
+INSERT INTO entry_log (studentid) VALUES ('STU001');
+
+//How to edit time of late
+ALTER TABLE entry_log 
+ALTER COLUMN is_late SET DEFAULT (CURRENT_TIME > '08:30:00');

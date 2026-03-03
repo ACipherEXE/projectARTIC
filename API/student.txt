@@ -1,0 +1,37 @@
+Insert:
+INSERT INTO students (firstName, lastName, emails, studentid, phoneNumber, grade)
+VALUES ('John', 'Doe', '{"test@email.com", "test2@email.com"}', 'STU001', '555-0123', '10');
+
+
+Edit:
+
+// Update one area of the student
+UPDATE students
+SET grade = '11'
+WHERE studentid = 'STU001';
+
+// Update multiple areas of the student
+UPDATE students
+SET grade = '12',
+    emails = '{"updated@email.com", "johndoe@school.edu"}'
+WHERE studentid = 'STU001';
+
+// Remove a spesific email array
+UPDATE students
+SET emails = array_remove(emails, 'test@email.com')
+WHERE studentid = 'STU001';
+
+// Add a new email to array
+UPDATE students
+SET emails = array_append(emails, 'new@email.com')
+WHERE studentid = 'STU001';
+
+Drop:
+
+// Drop with there student ID
+DELETE FROM students
+WHERE studentid = 'STU001';
+
+// Drop with there UUID
+DELETE FROM students
+WHERE uuid = 'specific-uuid-here';
