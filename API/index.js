@@ -14,7 +14,7 @@ const pool = new Pool({
   password: "password",
   database: "projectARTIC",
 });
-
+// Time entry area
 // Enter a student ID and the database will take care of the rest
 app.get("/time-entry/:studentId", async (req, res) => {
   // Takes the student ID from the URL
@@ -31,6 +31,10 @@ app.get("/time-entry/:studentId", async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 });
+
+// Student area
+
+// Joining student and time
 
 // --- Start server ---
 app.listen(3001, () => {
