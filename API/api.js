@@ -37,7 +37,7 @@ const pool = new Pool({
 //V2
 app.post("/time-entry", async (req, res) => {
   // Takes the student ID from the URL
-  const { studentId } = req.body;
+  const { studentId } = req.query;
   if (!studentId) {
     return res.status(400).json({ error: "studentId is required" });
   }
@@ -59,6 +59,27 @@ app.post("/time-entry", async (req, res) => {
 
 // Student area
 
+// Look up a spesific student you must have studentId for look up
+app.get("/student", async (req, res) => {
+  const { studentId } = req.query;
+
+  try {
+    let result;
+    if (!studentId) {
+      return res.status(400).json({ error: "studentId is required" });
+    }
+    if (studentId) {
+      result = await pool.query(
+        "SELECT uuid, firstName, lastName, emails, studentid, phoneNumber, grade FROM students WHERE studentid = $1",
+        [studentId],
+      );
+    }
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
 // Joining student and time
 
 // Gives a list of times of students entring the campus (With a querty param you can as well give a stuudentId (EX.http:sample:0000/entry-logs?studentId=0000))
