@@ -15,26 +15,8 @@ const pool = new Pool({
   database: "projectARTIC",
 });
 // Time entry area
-// Enter a student ID and the database will take care of the rest
-// V1
-// app.post("/time-entry/:studentId", async (req, res) => {
-//   // Takes the student ID from the URL
-//   const studentId = req.params.studentId;
-//   try {
-//     const result = await pool.query(
-//       "INSERT INTO entry_log (studentid) VALUES ($1)",
-//       [studentId],
-//     );
-//     res
-//       .status(200)
-//       .json({ response: "Time entry was a success", studentId: studentId });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: "Database error" });
-//   }
-// });
 
-//V2
+// Enter a student ID and the database will take care of the rest
 app.post("/time-entry", async (req, res) => {
   // Takes the student ID from the URL
   const { studentId } = req.query;
@@ -55,11 +37,9 @@ app.post("/time-entry", async (req, res) => {
   }
 });
 
-// Look up a list of entries done by students
-
 // Student area
 
-// Look up a spesific student you must have studentId for look up
+// Looks up a spesific student you must have studentId for look up
 app.get("/student", async (req, res) => {
   const { studentId } = req.query;
 
@@ -80,6 +60,7 @@ app.get("/student", async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 });
+
 // Joining student and time
 
 // Gives a list of times of students entring the campus (With a querty param you can as well give a stuudentId (EX.http:sample:0000/entry-logs?studentId=0000))
