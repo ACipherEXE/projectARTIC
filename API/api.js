@@ -106,7 +106,7 @@ app.get("/entry-logs", async (req, res) => {
     res.status(200).json(result.rows);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Database error" });
+    res.status(500).json({ error: "No data was found" });
   }
 });
 
