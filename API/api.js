@@ -35,7 +35,7 @@ const pool = new Pool({
 // });
 
 //V2
-app.post("/time-entry/", async (req, res) => {
+app.post("/time-entry", async (req, res) => {
   // Takes the student ID from the URL
   const { studentId } = req.body;
   if (!studentId) {
@@ -60,6 +60,55 @@ app.post("/time-entry/", async (req, res) => {
 // Student area
 
 // Joining student and time
+
+// Gives a list of times of students entring the campus (With a querty param you can as well give a stuudentId (EX.http:sample:0000/entry-logs?studentId=0000))
+app.get("/entry-logs", async (req, res) => {
+  const { studentId } = req.query;
+  try {
+    let result;
+    if (studentId) {
+      result = await pool.query(
+        `SELECT 
+          s.uuid AS student_uuid,
+          s.firstName,
+          s.lastName,
+          s.emails,
+          s.studentid,
+          s.phoneNumber,
+          s.grade,
+          e.uuid AS entry_uuid,
+          e.date,
+          e.time,
+          e.is_late
+        FROM students s
+        JOIN entry_log e ON s.studentid = e.studentid
+        WHERE s.studentid = $1`,
+        [studentId],
+      );
+    } else {
+      result = await pool.query(
+        `SELECT 
+          s.uuid AS student_uuid,
+          s.firstName,
+          s.lastName,
+          s.emails,
+          s.studentid,
+          s.phoneNumber,
+          s.grade,
+          e.uuid AS entry_uuid,
+          e.date,
+          e.time,
+          e.is_late
+        FROM students s
+        JOIN entry_log e ON s.studentid = e.studentid`,
+      );
+    }
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
 
 // Start server
 app.listen(3001, () => {
