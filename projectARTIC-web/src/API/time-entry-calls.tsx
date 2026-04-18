@@ -5,9 +5,9 @@ function apiEndpontManager() {
   return localAPIEndpoint;
 }
 /**
- * This function is uused to clock in the student in the system
+ * This function is used to clock in the student in the system
  * @param {string} studentId - The students ID you want to pass
- * @returns
+ * @returns The reponse from the API
  */
 export async function studentClockIn(studentId: string) {
   try {
@@ -16,7 +16,7 @@ export async function studentClockIn(studentId: string) {
       {
         method: "POST",
       },
-    ).then((response) => response.json());
+    ).then((response) => (response.status === 200 ? response.json() : {}));
   } catch (error) {
     return "Something has gone wrong";
   }
