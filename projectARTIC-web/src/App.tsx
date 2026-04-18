@@ -1,3 +1,4 @@
+import { studentClockIn } from "./API/time-entry-calls";
 import "./App.css";
 import { Button } from "./components/ui/button";
 import {
@@ -29,7 +30,7 @@ function App() {
             <Button
               className="bg-blue-500 hover:bg-blue-700 text-white px-6"
               type="submit"
-              onClick={() => console.log("yeet")}
+              onClick={async () => console.log(await studentClockIn("STU004"))}
             >
               Submit
             </Button>

@@ -28,9 +28,11 @@ app.post("/time-entry", async (req, res) => {
       "INSERT INTO entry_log (studentid) VALUES ($1)",
       [studentId],
     );
-    res
-      .status(200)
-      .json({ response: "Time entry was a success", studentId: studentId });
+    res.status(200).json({
+      response: "Time entry was a success",
+      studentId: studentId,
+      db: result,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Database error" });

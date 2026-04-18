@@ -5,17 +5,14 @@ function apiEndpontManager() {
   return localAPIEndpoint;
 }
 
-export function studentClockIn(studentId: string) {
+export async function studentClockIn(studentId: string) {
   try {
-    fetch(`${apiEndpontManager()}/time-entry?studentId=${studentId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((response) => response.text())
-      .then((result) => {
-        console.log(result);
-        return "Entry Recorded Successfully";
-      });
+    return await fetch(
+      `${apiEndpontManager()}/time-entry?studentId=${studentId}`,
+      {
+        method: "POST",
+      },
+    ).then((response) => response.json());
   } catch (error) {
     return "Something has gone wrong";
   }
