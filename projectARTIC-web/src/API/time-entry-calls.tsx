@@ -4,7 +4,11 @@ const localAPIEndpoint = "http://localhost:3001";
 function apiEndpontManager() {
   return localAPIEndpoint;
 }
-
+/**
+ * This function is uused to clock in the student in the system
+ * @param {string} studentId - The students ID you want to pass
+ * @returns
+ */
 export async function studentClockIn(studentId: string) {
   try {
     return await fetch(
