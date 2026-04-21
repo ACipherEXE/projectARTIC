@@ -1,4 +1,4 @@
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { studentClockIn } from "./API/time-entry-calls";
 import "./App.css";
 import { Button } from "./components/ui/button";
@@ -25,20 +25,33 @@ function App() {
         await studentClockIn(studentID).then((result) => {
           if (!result || Object.keys(result).length === 0) {
             setErrorDescription("Student ID not found, try once more");
+            setWasSuccess(false);
             setErrorState(true);
             return;
           }
           setErrorDescription(defaultErrorState);
+          setWasSuccess(true);
           setErrorState(false);
           return;
         });
       } catch {
         setErrorDescription(defaultErrorState);
+        setWasSuccess(false);
         setErrorState(true);
         return;
       }
     }
   }
+
+  // Timer to reset the output to normal
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setWasSuccess(false);
+      setErrorState(false);
+    }, 3000);
+    // Clean up of timer
+    return () => clearTimeout(timer);
+  }, [wasSuccess]);
 
   return (
     <>
@@ -53,6 +66,9 @@ function App() {
               id="fieldgroup-name"
               placeholder="EX: STU001"
               onChange={(input) => setStudentID(input.target.value)}
+              onKeyDown={(e) => {
+                e.key === "Enter" && sendStudentClockIn();
+              }}
             />
             <FieldDescription className={errorState ? "text-red-500" : ""}>
               {errorState
