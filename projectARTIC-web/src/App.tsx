@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import { studentClockIn } from "./API/time-entry-calls";
 import "./App.css";
 import { Button } from "./components/ui/button";
@@ -11,27 +11,37 @@ import {
 import { Input } from "./components/ui/input";
 function App() {
   const [studentID, setStudentID] = useState("");
+  const [errorState, setErrorState] = useState(false);
+  const defaultErrorState = "Something went wrong, try once more";
+  const [errorDescription, setErrorDescription] = useState(defaultErrorState);
+  const [wasSuccess, setWasSuccess] = useState(false);
 
   async function sendStudentClockIn() {
     if (!studentID) {
       console.log("ERROR STATE: Enter a student ID");
-      return false;
+      setErrorDescription("Enter a student ID");
+      setErrorState(true);
     } else {
       try {
         await studentClockIn(studentID).then((result) => {
-          if (!result) {
+          if (!result || Object.keys(result).length === 0) {
             console.log(
-              "ERROR STATE: API SENT A NULL so not fund or something went wrong",
+              "ERROR STATE: API SENT A NULL so not found or something went wrong",
             );
-            return false;
+            setErrorDescription("Student ID not found, try once more");
+            setErrorState(true);
+            return;
           }
           console.log("PASS STATE: The student has clocked in");
-          return true;
+          setErrorDescription(defaultErrorState);
+          setErrorState(false);
+          return;
         });
-        return true;
       } catch {
         console.log("ERROR STATE: API failed");
-        return false;
+        setErrorDescription(defaultErrorState);
+        setErrorState(true);
+        return;
       }
     }
   }
@@ -51,7 +61,11 @@ function App() {
               onChange={(input) => setStudentID(input.target.value)}
             />
             <FieldDescription>
-              Enter the students ID here for the timecard system
+              {errorState
+                ? errorDescription
+                : wasSuccess
+                  ? `Student ${studentID} has clocked in`
+                  : "Enter the students ID here for the timecard system"}
             </FieldDescription>
           </Field>
           <Field orientation="horizontal">
