@@ -18,27 +18,21 @@ function App() {
 
   async function sendStudentClockIn() {
     if (!studentID) {
-      console.log("ERROR STATE: Enter a student ID");
       setErrorDescription("Enter a student ID");
       setErrorState(true);
     } else {
       try {
         await studentClockIn(studentID).then((result) => {
           if (!result || Object.keys(result).length === 0) {
-            console.log(
-              "ERROR STATE: API SENT A NULL so not found or something went wrong",
-            );
             setErrorDescription("Student ID not found, try once more");
             setErrorState(true);
             return;
           }
-          console.log("PASS STATE: The student has clocked in");
           setErrorDescription(defaultErrorState);
           setErrorState(false);
           return;
         });
       } catch {
-        console.log("ERROR STATE: API failed");
         setErrorDescription(defaultErrorState);
         setErrorState(true);
         return;
@@ -60,7 +54,7 @@ function App() {
               placeholder="EX: STU001"
               onChange={(input) => setStudentID(input.target.value)}
             />
-            <FieldDescription>
+            <FieldDescription className={errorState ? "text-red-500" : ""}>
               {errorState
                 ? errorDescription
                 : wasSuccess
