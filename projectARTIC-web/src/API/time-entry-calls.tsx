@@ -21,3 +21,29 @@ export async function studentClockIn(studentId: string) {
     return {};
   }
 }
+
+export async function getEntryLogs(studentId: string) {
+  try {
+    return await fetch(
+      `${apiEndpontManager()}/entry-logs?studentId=${studentId}`,
+      {
+        method: "POST",
+      },
+    ).then((response) => (response.status === 200 ? response.json() : {}));
+  } catch (error) {
+    return {};
+  }
+}
+
+export async function getStudentInfo(studentId: string) {
+  try {
+    return await fetch(
+      `${apiEndpontManager()}/student?studentId=${studentId}`,
+      {
+        method: "POST",
+      },
+    ).then((response) => (response.status === 200 ? response.json() : {}));
+  } catch (error) {
+    return {};
+  }
+}
