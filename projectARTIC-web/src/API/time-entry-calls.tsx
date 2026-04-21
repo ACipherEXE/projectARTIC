@@ -18,6 +18,6 @@ export async function studentClockIn(studentId: string) {
       },
     ).then((response) => (response.status === 200 ? response.json() : {}));
   } catch (error) {
-    return "Something has gone wrong";
+    return {};
   }
 }
