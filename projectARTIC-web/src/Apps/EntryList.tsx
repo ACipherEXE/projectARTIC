@@ -1,4 +1,4 @@
-function NavBar() {
+function EntryList() {
   return (
     <>
       <div className="text-white m-8">This is a test</div>
@@ -6,4 +6,4 @@ function NavBar() {
   );
 }
 
-export default NavBar;
+export default EntryList;
