@@ -18,7 +18,7 @@ function NavBar({ children }: { children: React.ReactNode }) {
               <Link to="/entry-list">Entry List</Link>
             </NavigationMenuItem>
             <NavigationMenuItem className="mr-4">
-              <Link to="/">Look up</Link>
+              <Link to="/look-up">Look up</Link>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
