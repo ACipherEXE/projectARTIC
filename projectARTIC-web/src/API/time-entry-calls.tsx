@@ -27,7 +27,7 @@ export async function getEntryLogs(studentId: string) {
     return await fetch(
       `${apiEndpontManager()}/entry-logs?studentId=${studentId}`,
       {
-        method: "POST",
+        method: "GET",
       },
     ).then((response) => (response.status === 200 ? response.json() : {}));
   } catch (error) {
@@ -40,7 +40,7 @@ export async function getStudentInfo(studentId: string) {
     return await fetch(
       `${apiEndpontManager()}/student?studentId=${studentId}`,
       {
-        method: "POST",
+        method: "GET",
       },
     ).then((response) => (response.status === 200 ? response.json() : {}));
   } catch (error) {
