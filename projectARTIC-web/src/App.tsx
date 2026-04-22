@@ -63,7 +63,7 @@ function App() {
               Student ID
             </FieldLabel>
             <Input
-              className="bg-white"
+              className="bg-white text-black"
               id="fieldgroup-name"
               placeholder="EX: STU001"
               onChange={(input) => setStudentID(input.target.value)}
