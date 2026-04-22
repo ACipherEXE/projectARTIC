@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { studentClockIn } from "./API/time-entry-calls";
 import "./App.css";
 import { Button } from "./components/ui/button";
@@ -9,6 +9,7 @@ import {
   FieldLabel,
 } from "./components/ui/field";
 import { Input } from "./components/ui/input";
+
 function App() {
   const [studentID, setStudentID] = useState("");
   const [errorState, setErrorState] = useState(false);
@@ -55,8 +56,8 @@ function App() {
 
   return (
     <>
-      <div className="main-container flex items-center justify-center min-h-screen w-full">
-        <FieldGroup className="object-center">
+      <div className="w-2/4">
+        <FieldGroup className="text-white">
           <Field>
             <FieldLabel htmlFor="fieldgroup-name" className="text-white">
               Student ID
