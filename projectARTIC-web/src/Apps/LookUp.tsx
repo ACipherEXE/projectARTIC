@@ -8,6 +8,7 @@ import {
 } from "../components/ui/field";
 import { Input } from "../components/ui/input";
 import { studentClockIn } from "../API/time-entry-calls";
+import UserDataInput from "../components/custom/UserDataInput";
 
 function LookUp() {
   const [studentID, setStudentID] = useState("");
@@ -51,8 +52,23 @@ function LookUp() {
     // Clean up of timer
     return () => clearTimeout(timer);
   }, [wasSuccess]);
+
   return (
     <>
+      <UserDataInput
+        header={""}
+        subText={""}
+        buttonText={""}
+        textboxPlaceholder={""}
+        onChange={function (value: string): void {
+          throw new Error("Function not implemented.");
+        }}
+        actionWanted={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+        errorStateText={""}
+        successText={""}
+      />
       <div className="w-2/4">
         <FieldGroup className="text-white">
           <Field>
