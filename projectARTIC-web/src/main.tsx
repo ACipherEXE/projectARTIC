@@ -4,8 +4,8 @@ import "./index.css";
 import App from "./App.tsx";
 import NavBar from "./components/custom/NavBar.tsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import EntryList from "./Apps/EntryList.tsx";
-import LookUp from "./Apps/LookUp.tsx";
+import EntryList from "./Pages/EntryList.tsx";
+import LookUp from "./Pages/LookUp.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

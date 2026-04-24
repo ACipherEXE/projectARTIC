@@ -56,18 +56,19 @@ function LookUp() {
   return (
     <>
       <UserDataInput
-        header={""}
-        subText={""}
-        buttonText={""}
-        textboxPlaceholder={""}
-        onChange={function (value: string): void {
-          throw new Error("Function not implemented.");
+        header={"Student Look Up"}
+        subText={"Enter a student ID to look up"}
+        buttonText={"Look Up"}
+        textboxPlaceholder={"EX: STU001"}
+        onChange={(value: string): void => {
+          setStudentID(value);
         }}
-        actionWanted={function (): void {
+        actionWanted={(): void => {
           throw new Error("Function not implemented.");
         }}
         errorStateText={""}
         successText={""}
+        errorState={errorState}
       />
       <div className="w-2/4">
         <FieldGroup className="text-white">
