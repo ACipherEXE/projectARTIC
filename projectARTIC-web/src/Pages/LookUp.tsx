@@ -64,46 +64,13 @@ function LookUp() {
           setStudentID(value);
         }}
         actionWanted={(): void => {
-          throw new Error("Function not implemented.");
+          sendStudentClockIn();
         }}
-        errorStateText={""}
-        successText={""}
+        errorStateText={errorDescription}
+        success={wasSuccess}
+        successText={`Student ${studentID} has clocked in`}
         errorState={errorState}
       />
-      <div className="w-2/4">
-        <FieldGroup className="text-white">
-          <Field>
-            <FieldLabel htmlFor="fieldgroup-name" className="text-white">
-              Student Look Up
-            </FieldLabel>
-            <Input
-              className="bg-white text-black"
-              id="fieldgroup-name"
-              placeholder="EX: STU001"
-              onChange={(input) => setStudentID(input.target.value)}
-              onKeyDown={(e) => {
-                e.key === "Enter" && sendStudentClockIn();
-              }}
-            />
-            <FieldDescription className={errorState ? "text-red-500" : ""}>
-              {errorState
-                ? errorDescription
-                : wasSuccess
-                  ? `Student ${studentID} has clocked in`
-                  : "Enter a students ID to look up about them"}
-            </FieldDescription>
-          </Field>
-          <Field orientation="horizontal">
-            <Button
-              className="bg-blue-500 hover:bg-blue-700 text-white px-6"
-              type="submit"
-              onClick={() => sendStudentClockIn()}
-            >
-              Search
-            </Button>
-          </Field>
-        </FieldGroup>
-      </div>
     </>
   );
 }
