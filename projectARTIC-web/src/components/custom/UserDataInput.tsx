@@ -2,6 +2,19 @@ import { Field, FieldDescription, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import type { UserDataInputProps } from "../../interfaces/UserDataInput.types";
+
+/**
+ *
+ * @param {string} header  - Text display above the text box
+ * @param {string} subText - Text displayed under the textbox
+ * @param {string} buttonText - Button Text
+ * @param {string} textboxPlaceholder - Placeholder of text wanted in the textbox
+ * @param {string} errorStateText - Text you want to display to user when a problem has happened
+ * @param {boolean} errorState - A boolean you pass to tell the errorStateText to display
+ * @param {string} successText - Text you want to display to user when a request was successful
+ * @param {boolean} success - A boolean you pass to tell the successText to display
+ * @returns
+ */
 function UserDataInput({
   header,
   subText,
