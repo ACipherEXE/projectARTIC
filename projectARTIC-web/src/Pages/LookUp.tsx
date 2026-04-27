@@ -35,7 +35,6 @@ function LookUp() {
           setErrorDescription(defaultErrorState);
           setWasSuccess(true);
           setErrorState(false);
-          console.log("result", result);
           setStudentData(result);
           return;
         });
