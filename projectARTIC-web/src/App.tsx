@@ -1,14 +1,6 @@
 import { useEffect, useState } from "react";
 import { studentClockIn } from "./API/time-entry-calls";
 import "./App.css";
-import { Button } from "./components/ui/button";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "./components/ui/field";
-import { Input } from "./components/ui/input";
 import UserDataInput from "./components/custom/UserDataInput";
 
 function App() {
@@ -58,9 +50,9 @@ function App() {
   return (
     <>
       <UserDataInput
-        header={"Student Look Up"}
-        subText={"Enter a student ID to look up"}
-        buttonText={"Look Up"}
+        header={"Student ID"}
+        subText={"Enter the students ID here for the timecard system"}
+        buttonText={"Submit"}
         textboxPlaceholder={"EX: STU001"}
         onChange={(value: string): void => {
           setStudentID(value);
