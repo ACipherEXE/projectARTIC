@@ -79,15 +79,14 @@ function LookUp() {
       <div className="w-full max-w-md">
         {studentData && (
           <form>
-            <FieldGroup>
+            <FieldGroup className="mt-8">
               <FieldSet>
                 <FieldLegend>Student Info</FieldLegend>
                 <FieldGroup>
                   <FieldGroup className="grid max-w-sm grid-cols-2 text-white">
                     <Field>
-                      <FieldLabel htmlFor="first-name">First Name</FieldLabel>
+                      <FieldLabel>First Name</FieldLabel>
                       <Input
-                        id="first-name"
                         className="text-white"
                         value={studentData?.firstname ?? ""}
                         disabled
@@ -95,37 +94,21 @@ function LookUp() {
                     </Field>
                     <Field>
                       <FieldLabel>Last Name</FieldLabel>
-                      <Input
-                        id="last-name"
-                        value={studentData?.lastname ?? ""}
-                        disabled
-                      />
+                      <Input value={studentData?.lastname ?? ""} disabled />
                     </Field>
                   </FieldGroup>
                   <div className="grid grid-cols-3 gap-4">
                     <Field>
                       <FieldLabel>Grade</FieldLabel>
-                      <Input
-                        id="checkout-7j9-card-number-uw1"
-                        value={studentData?.grade ?? ""}
-                        disabled
-                      />
+                      <Input value={studentData?.grade ?? ""} disabled />
                     </Field>
                   </div>
                   <Field>
-                    <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
-                      Phone Number
-                    </FieldLabel>
-                    <Input
-                      id="checkout-7j9-card-number-uw1"
-                      value={studentData?.phonenumber ?? ""}
-                      disabled
-                    />
+                    <FieldLabel>Phone Number</FieldLabel>
+                    <Input value={studentData?.phonenumber ?? ""} disabled />
                   </Field>
                   <Field>
-                    <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
-                      E-Mails
-                    </FieldLabel>
+                    <FieldLabel>E-Mails</FieldLabel>
                     {studentData?.emails?.map((email: string) => (
                       <a
                         href={`mailto:${email}`}
