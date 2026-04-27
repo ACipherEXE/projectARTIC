@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { Button } from "../components/ui/button";
+import { getStudentInfo } from "../API/time-entry-calls";
+import UserDataInput from "../components/custom/UserDataInput";
 import {
   Field,
-  FieldDescription,
   FieldGroup,
   FieldLabel,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
 } from "../components/ui/field";
 import { Input } from "../components/ui/input";
-import { studentClockIn } from "../API/time-entry-calls";
-import UserDataInput from "../components/custom/UserDataInput";
 
 function LookUp() {
   const [studentID, setStudentID] = useState("");
@@ -16,13 +17,15 @@ function LookUp() {
   const defaultErrorState = "Something went wrong, try once more";
   const [errorDescription, setErrorDescription] = useState(defaultErrorState);
   const [wasSuccess, setWasSuccess] = useState(false);
-  async function sendStudentClockIn() {
+  const [studentData, setStudentData] = useState(null);
+
+  async function searchStudentID() {
     if (!studentID) {
       setErrorDescription("Enter a student ID");
       setErrorState(true);
     } else {
       try {
-        await studentClockIn(studentID).then((result) => {
+        await getStudentInfo(studentID).then((result) => {
           if (!result || Object.keys(result).length === 0) {
             setErrorDescription("Student ID not found, try once more");
             setWasSuccess(false);
@@ -32,6 +35,8 @@ function LookUp() {
           setErrorDescription(defaultErrorState);
           setWasSuccess(true);
           setErrorState(false);
+          console.log("result", result);
+          setStudentData(result[0]);
           return;
         });
       } catch {
@@ -64,13 +69,76 @@ function LookUp() {
           setStudentID(value);
         }}
         actionWanted={(): void => {
-          sendStudentClockIn();
+          searchStudentID();
         }}
         errorStateText={errorDescription}
         success={wasSuccess}
-        successText={`Student ${studentID} has clocked in`}
+        successText={`Student ${studentID} has been found`}
         errorState={errorState}
       />
+      <div className="w-full max-w-md">
+        {studentData && (
+          <form>
+            <FieldGroup>
+              <FieldSet>
+                <FieldLegend>Student Info</FieldLegend>
+                <FieldGroup>
+                  <FieldGroup className="grid max-w-sm grid-cols-2 text-white">
+                    <Field>
+                      <FieldLabel htmlFor="first-name">First Name</FieldLabel>
+                      <Input
+                        id="first-name"
+                        className="text-white"
+                        value={studentData?.firstname ?? ""}
+                        disabled
+                      />
+                    </Field>
+                    <Field>
+                      <FieldLabel>Last Name</FieldLabel>
+                      <Input
+                        id="last-name"
+                        value={studentData?.lastname ?? ""}
+                        disabled
+                      />
+                    </Field>
+                  </FieldGroup>
+                  <div className="grid grid-cols-3 gap-4">
+                    <Field>
+                      <FieldLabel>Grade</FieldLabel>
+                      <Input
+                        id="checkout-7j9-card-number-uw1"
+                        value={studentData?.grade ?? ""}
+                        disabled
+                      />
+                    </Field>
+                  </div>
+                  <Field>
+                    <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
+                      Phone Number
+                    </FieldLabel>
+                    <Input
+                      id="checkout-7j9-card-number-uw1"
+                      value={studentData?.phonenumber ?? ""}
+                      disabled
+                    />
+                  </Field>
+                  <Field>
+                    <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
+                      E-Mails
+                    </FieldLabel>
+                    <Input
+                      id="checkout-7j9-card-number-uw1"
+                      value={studentData?.emails ?? ""}
+                      disabled
+                    />
+                  </Field>
+                </FieldGroup>
+              </FieldSet>
+              <FieldSeparator />
+            </FieldGroup>
+          </form>
+        )}
+      </div>
     </>
   );
 }
