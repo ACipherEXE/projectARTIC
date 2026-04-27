@@ -36,7 +36,7 @@ function LookUp() {
           setWasSuccess(true);
           setErrorState(false);
           console.log("result", result);
-          setStudentData(result[0]);
+          setStudentData(result);
           return;
         });
       } catch {
@@ -126,11 +126,14 @@ function LookUp() {
                     <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
                       E-Mails
                     </FieldLabel>
-                    <Input
-                      id="checkout-7j9-card-number-uw1"
-                      value={studentData?.emails ?? ""}
-                      disabled
-                    />
+                    {studentData?.emails?.map((email: string) => (
+                      <a
+                        href={`mailto:${email}`}
+                        className="text-primary text-blue-500 underline hover:opacity-80"
+                      >
+                        {email}
+                      </a>
+                    ))}
                   </Field>
                 </FieldGroup>
               </FieldSet>

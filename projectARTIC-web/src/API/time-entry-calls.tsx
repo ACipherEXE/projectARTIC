@@ -42,7 +42,11 @@ export async function getStudentInfo(studentId: string) {
       {
         method: "GET",
       },
-    ).then((response) => (response.status === 200 ? response.json() : {}));
+    ).then((response) =>
+      response.status === 200
+        ? response.json().then((data) => data[0] ?? {})
+        : {},
+    );
   } catch (error) {
     return {};
   }
