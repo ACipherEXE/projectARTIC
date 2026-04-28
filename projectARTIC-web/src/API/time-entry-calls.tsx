@@ -26,10 +26,18 @@ export async function studentClockIn(studentId: string) {
  * @param studentId - (optional) The students ID
  * @returns
  */
-export async function getEntryLogs(studentId?: string) {
+export async function getEntryLogs({
+  studentId,
+  limit,
+  page,
+}: {
+  studentId?: string;
+  limit?: number;
+  page?: number;
+} = {}) {
   try {
     return await fetch(
-      `${apiEndpontManager()}/entry-logs?studentId=${studentId}`,
+      `${apiEndpontManager()}/entry-logs${studentId || limit || page ? "?" : ""}${studentId ? `studentId=${studentId}` : ""}${limit ? `limit=${String(limit)}` : ""}${page ? `page=${String(limit)}` : ""}`,
       {
         method: "GET",
       },

@@ -66,47 +66,63 @@ app.get("/student", async (req, res) => {
 
 // Gives a list of times of students entring the campus (With a querty param you can as well give a stuudentId (EX.http:sample:0000/entry-logs?studentId=0000))
 app.get("/entry-logs", async (req, res) => {
-  const { studentId } = req.query;
+  const { studentId, page = 1, limit = 20 } = req.query;
+
+  const pageNum = Math.max(1, parseInt(page));
+  const limitNum = Math.max(1, Math.min(100, parseInt(limit))); // cap at 100
+  const offset = (pageNum - 1) * limitNum;
+
+  const baseQuery = `
+    SELECT 
+      s.uuid AS student_uuid,
+      s.firstName,
+      s.lastName,
+      s.emails,
+      s.studentid,
+      s.phoneNumber,
+      s.grade,
+      e.uuid AS entry_uuid,
+      e.date,
+      e.time,
+      e.is_late
+    FROM students s
+    JOIN entry_log e ON s.studentid = e.studentid
+  `;
+
   try {
-    let result;
+    let result, countResult;
+
     if (studentId) {
       result = await pool.query(
-        `SELECT 
-          s.uuid AS student_uuid,
-          s.firstName,
-          s.lastName,
-          s.emails,
-          s.studentid,
-          s.phoneNumber,
-          s.grade,
-          e.uuid AS entry_uuid,
-          e.date,
-          e.time,
-          e.is_late
-        FROM students s
-        JOIN entry_log e ON s.studentid = e.studentid
-        WHERE s.studentid = $1`,
+        `${baseQuery} WHERE s.studentid = $1 ORDER BY e.date DESC, e.time DESC LIMIT $2 OFFSET $3`,
+        [studentId, limitNum, offset],
+      );
+      countResult = await pool.query(
+        `SELECT COUNT(*) FROM students s JOIN entry_log e ON s.studentid = e.studentid WHERE s.studentid = $1`,
         [studentId],
       );
     } else {
       result = await pool.query(
-        `SELECT 
-          s.uuid AS student_uuid,
-          s.firstName,
-          s.lastName,
-          s.emails,
-          s.studentid,
-          s.phoneNumber,
-          s.grade,
-          e.uuid AS entry_uuid,
-          e.date,
-          e.time,
-          e.is_late
-        FROM students s
-        JOIN entry_log e ON s.studentid = e.studentid`,
+        `${baseQuery} ORDER BY e.date DESC, e.time DESC LIMIT $1 OFFSET $2`,
+        [limitNum, offset],
+      );
+      countResult = await pool.query(
+        `SELECT COUNT(*) FROM students s JOIN entry_log e ON s.studentid = e.studentid`,
       );
     }
-    res.status(200).json(result.rows);
+
+    const totalItems = parseInt(countResult.rows[0].count);
+    const totalPages = Math.ceil(totalItems / limitNum);
+
+    res.status(200).json({
+      data: result.rows,
+      pagination: {
+        totalItems,
+        totalPages,
+        currentPage: pageNum,
+        limit: limitNum,
+      },
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "No data was found" });

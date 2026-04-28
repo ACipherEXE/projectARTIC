@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   TableCaption,
   TableHeader,
@@ -8,12 +9,24 @@ import {
   TableFooter,
   Table,
 } from "../components/ui/table";
+import { getEntryLogs } from "../API/time-entry-calls";
 
 /**
  *
  * @returns A table of student entries
  */
 function EntryList() {
+  const [currentEntryList, setCurrentState] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentLimit, setCurrentLimit] = useState(25);
+  useEffect(() => {
+    getEntryLogs({ limit: 10, page: 1 }).then((result) => {
+      console.log(result);
+      setCurrentState(result);
+      return;
+    });
+  }, []);
+
   const invoices = [
     {
       invoice: "INV001",
@@ -60,7 +73,6 @@ function EntryList() {
   ];
   return (
     <>
-      <div className="text-white m-8">This is a test</div>
       <Table>
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>
