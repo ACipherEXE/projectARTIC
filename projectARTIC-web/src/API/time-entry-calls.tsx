@@ -1,3 +1,5 @@
+import type { EntryLogResponse } from "../interfaces/UserDataInput.types";
+
 const localAPIEndpoint = "http://localhost:3001";
 
 //Function will handle multiple endpoints of the API depending on what state we want it
