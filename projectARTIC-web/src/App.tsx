@@ -3,6 +3,10 @@ import { studentClockIn } from "./API/time-entry-calls";
 import "./App.css";
 import UserDataInput from "./components/custom/UserDataInput";
 
+/**
+ *
+ * @returns Main Page and to enter student ID to clock in
+ */
 function App() {
   const [studentID, setStudentID] = useState("");
   const [errorState, setErrorState] = useState(false);

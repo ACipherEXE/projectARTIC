@@ -5,7 +5,7 @@ function apiEndpontManager() {
   return localAPIEndpoint;
 }
 /**
- * This function is used to clock in the student in the system
+ * This API call is used to clock in the student in the system
  * @param {string} studentId - The students ID you want to pass
  * @returns The reponse from the API
  */
@@ -21,8 +21,12 @@ export async function studentClockIn(studentId: string) {
     return {};
   }
 }
-
-export async function getEntryLogs(studentId: string) {
+/**
+ * Asks the API a list of entries
+ * @param studentId - (optional) The students ID
+ * @returns
+ */
+export async function getEntryLogs(studentId?: string) {
   try {
     return await fetch(
       `${apiEndpontManager()}/entry-logs?studentId=${studentId}`,
@@ -34,7 +38,11 @@ export async function getEntryLogs(studentId: string) {
     return {};
   }
 }
-
+/**
+ * Asks the API for student data of the matching student ID
+ * @param studentId - The students ID
+ * @returns - Returns the students info.
+ */
 export async function getStudentInfo(studentId: string) {
   try {
     return await fetch(

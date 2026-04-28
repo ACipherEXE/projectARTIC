@@ -11,6 +11,10 @@ import {
 } from "../components/ui/field";
 import { Input } from "../components/ui/input";
 
+/**
+ *
+ * @returns This page is used to look up students and display data of them
+ */
 function LookUp() {
   const [studentID, setStudentID] = useState("");
   const [errorState, setErrorState] = useState(false);
