@@ -73,8 +73,7 @@ app.get("/entry-logs", async (req, res) => {
   const offset = (pageNum - 1) * limitNum;
 
   const baseQuery = `
-    SELECT 
-      s.uuid AS student_uuid,
+    SELECT
       s.firstName,
       s.lastName,
       s.emails,

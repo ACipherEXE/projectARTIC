@@ -15,56 +15,102 @@ import type {
   Pagination,
   Student,
 } from "../interfaces/UserDataInput.types";
+import { formatDate, formatTime } from "../Function-Box/time-and-date";
+import { Button } from "../components/ui/button";
+import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 
 /**
  *
  * @returns A table of student entries
  */
 function EntryList() {
-  const [currentEntryList, setCurrentState] = useState<Student[]>(null);
+  const [currentEntryList, setCurrentEntryList] = useState<Student[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentLimit, setCurrentLimit] = useState(25);
-  const [currentPagination, setPagination] = useState<Pagination[]>();
+  const [currentPagination, setPagination] = useState<Pagination | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
+    setIsLoading(true);
+    setCurrentEntryList(null);
     getEntryLogs({ limit: currentLimit, page: currentPage }).then(
       (result: EntryLogResponse) => {
-        setCurrentState(result.data);
+        setCurrentEntryList(result.data);
         setPagination(result.pagination);
-        return;
+        setIsLoading(false);
       },
     );
   }, [currentLimit, currentPage]);
 
+  function changePage(direction: "next" | "prev") {
+    if (direction === "prev" && currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+    if (
+      direction === "next" &&
+      currentPagination &&
+      currentPage < currentPagination.totalPages
+    ) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  }
+
   return (
     <>
-      {currentEntryList && (
-        <Table>
-          <TableCaption>A list of student entries</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Student ID</TableHead>
-              <TableHead>Is Late</TableHead>
-              <TableHead>Time</TableHead>
-              <TableHead className="text-right">Date</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {currentEntryList.map((entry) => (
+      {!isLoading && currentEntryList.length > 0 && currentPagination && (
+        <>
+          <Table>
+            <TableCaption>A list of student entries</TableCaption>
+            <TableHeader>
               <TableRow>
-                <TableCell className="font-medium">{entry.studentid}</TableCell>
-                <TableCell>{entry.is_late ? "Yes" : "No"}</TableCell>
-                <TableCell>{entry.time}</TableCell>
-                <TableCell className="text-right">{entry.date}</TableCell>
+                <TableHead className="w-[100px]">Student ID</TableHead>
+                <TableHead>Is Late</TableHead>
+                <TableHead>Time</TableHead>
+                <TableHead className="text-right">Date</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan={3}>Page</TableCell>
-              <TableCell className="text-right">{`${currentPagination.currentPage}/${currentPagination.totalPages}`}</TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {currentEntryList.map((entry, key) => (
+                <TableRow key={key}>
+                  <TableCell className="font-medium">
+                    {entry.studentid}
+                  </TableCell>
+                  <TableCell>{entry.is_late ? "Yes" : "No"}</TableCell>
+                  <TableCell>{formatTime(entry.time)}</TableCell>
+                  <TableCell className="text-right">
+                    {formatDate(entry.date)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={3}>Page</TableCell>
+                <TableCell className="text-right">{`${currentPagination.currentPage}/${currentPagination.totalPages}`}</TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+          <div className="flex justify-between">
+            <Button
+              variant="outline"
+              size="icon"
+              aria-label="Last Page"
+              disabled={currentPage === 1}
+              onClick={() => changePage("prev")}
+            >
+              <ArrowLeftIcon />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              aria-label="Next Page"
+              disabled={currentPage === currentPagination.totalPages}
+              onClick={() => changePage("next")}
+            >
+              <ArrowRightIcon />
+            </Button>
+          </div>
+        </>
       )}
     </>
   );

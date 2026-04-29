@@ -24,9 +24,11 @@ export async function studentClockIn(studentId: string) {
   }
 }
 /**
- * Asks the API a list of entries
+ * Asks the API a list of student entries
  * @param studentId - (optional) The students ID
- * @returns
+ * @param limit - (optional) The amount of entries you want at once
+ * @param page - (optional) The page you want to display
+ * @returns - JSON of student entries
  */
 export async function getEntryLogs({
   studentId,
@@ -37,9 +39,12 @@ export async function getEntryLogs({
   limit?: number;
   page?: number;
 } = {}) {
+  const params = new URLSearchParams();
+  if (limit) params.append("limit", String(limit));
+  if (page) params.append("page", String(page));
   try {
     return await fetch(
-      `${apiEndpontManager()}/entry-logs${studentId || limit || page ? "?" : ""}${studentId ? `studentId=${studentId}` : ""}${limit ? `limit=${String(limit)}` : ""}${page ? `page=${String(limit)}` : ""}`,
+      `${apiEndpontManager()}/entry-logs${params.toString() ? `?${params.toString()}` : ""}`,
       {
         method: "GET",
       },
