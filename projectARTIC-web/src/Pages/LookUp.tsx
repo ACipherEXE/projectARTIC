@@ -17,7 +17,7 @@ import { useParams } from "react-router-dom";
  * @returns This page is used to look up students and display data of them
  */
 function LookUp() {
-  const [studentID, setStudentID] = useState("");
+  const [studentIdInput, setStudentIdInput] = useState("");
   const [errorState, setErrorState] = useState(false);
   const defaultErrorState = "Something went wrong, try once more";
   const [errorDescription, setErrorDescription] = useState(defaultErrorState);
@@ -25,33 +25,28 @@ function LookUp() {
   const [studentData, setStudentData] = useState(null);
   const { studentId } = useParams();
 
-  async function searchStudentID() {
-    if (!studentID) {
-      setErrorDescription("Enter a student ID");
-      setErrorState(true);
-    } else {
-      try {
-        await getStudentInfo(studentId ? studentId : studentID).then(
-          (result) => {
-            if (!result || Object.keys(result).length === 0) {
-              setErrorDescription("Student ID not found, try once more");
-              setWasSuccess(false);
-              setErrorState(true);
-              return;
-            }
-            setErrorDescription(defaultErrorState);
-            setWasSuccess(true);
-            setErrorState(false);
-            setStudentData(result);
-            return;
-          },
-        );
-      } catch {
+  async function searchStudentID(studentIdPassed) {
+    try {
+      await getStudentInfo(studentIdPassed).then((result) => {
+        if (!result || Object.keys(result).length === 0) {
+          setErrorDescription("Student ID not found, try once more");
+          setWasSuccess(false);
+          setErrorState(true);
+          setStudentData(null);
+          return;
+        }
         setErrorDescription(defaultErrorState);
-        setWasSuccess(false);
-        setErrorState(true);
+        setWasSuccess(true);
+        setErrorState(false);
+        setStudentData(result);
         return;
-      }
+      });
+    } catch {
+      setErrorDescription(defaultErrorState);
+      setWasSuccess(false);
+      setErrorState(true);
+      setStudentData(null);
+      return;
     }
   }
 
@@ -67,8 +62,8 @@ function LookUp() {
 
   useEffect(() => {
     if (studentId) {
-      setStudentID(studentId);
-      searchStudentID(); // pass it directly since state may not be set yet
+      setStudentIdInput(studentId);
+      searchStudentID(studentId); // pass it directly since state may not be set yet
     }
   }, [studentId]);
 
@@ -80,16 +75,16 @@ function LookUp() {
         buttonText={"Look Up"}
         textboxPlaceholder={"EX: STU001"}
         onChange={(value: string): void => {
-          setStudentID(value);
+          setStudentIdInput(value);
         }}
         actionWanted={(): void => {
-          searchStudentID(studentID);
+          searchStudentID(studentIdInput);
         }}
         errorStateText={errorDescription}
         success={wasSuccess}
-        successText={`Student ${studentID} has been found`}
+        successText={`Student ${studentIdInput} has been found`}
         errorState={errorState}
-        value={studentId}
+        value={studentIdInput}
       />
       <div className="w-full max-w-md">
         {studentData && (
