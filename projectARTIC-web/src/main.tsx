@@ -15,6 +15,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/" element={<App />} />
           <Route path="/entry-list" element={<EntryList />} />
           <Route path="/look-up" element={<LookUp />} />
+          <Route path="/look-up/:studentId" element={<LookUp />} />
         </Routes>
       </NavBar>
     </BrowserRouter>

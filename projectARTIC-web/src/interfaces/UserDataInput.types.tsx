@@ -9,6 +9,7 @@ export interface UserDataInputProps {
   errorStateText: string;
   success?: boolean;
   successText: string;
+  value?: string;
 }
 export interface Student {
   student_uuid: string;

@@ -10,6 +10,7 @@ import {
   FieldSet,
 } from "../components/ui/field";
 import { Input } from "../components/ui/input";
+import { useParams } from "react-router-dom";
 
 /**
  *
@@ -22,6 +23,7 @@ function LookUp() {
   const [errorDescription, setErrorDescription] = useState(defaultErrorState);
   const [wasSuccess, setWasSuccess] = useState(false);
   const [studentData, setStudentData] = useState(null);
+  const { studentId } = useParams();
 
   async function searchStudentID() {
     if (!studentID) {
@@ -29,19 +31,21 @@ function LookUp() {
       setErrorState(true);
     } else {
       try {
-        await getStudentInfo(studentID).then((result) => {
-          if (!result || Object.keys(result).length === 0) {
-            setErrorDescription("Student ID not found, try once more");
-            setWasSuccess(false);
-            setErrorState(true);
+        await getStudentInfo(studentId ? studentId : studentID).then(
+          (result) => {
+            if (!result || Object.keys(result).length === 0) {
+              setErrorDescription("Student ID not found, try once more");
+              setWasSuccess(false);
+              setErrorState(true);
+              return;
+            }
+            setErrorDescription(defaultErrorState);
+            setWasSuccess(true);
+            setErrorState(false);
+            setStudentData(result);
             return;
-          }
-          setErrorDescription(defaultErrorState);
-          setWasSuccess(true);
-          setErrorState(false);
-          setStudentData(result);
-          return;
-        });
+          },
+        );
       } catch {
         setErrorDescription(defaultErrorState);
         setWasSuccess(false);
@@ -61,6 +65,13 @@ function LookUp() {
     return () => clearTimeout(timer);
   }, [wasSuccess]);
 
+  useEffect(() => {
+    if (studentId) {
+      setStudentID(studentId);
+      searchStudentID(); // pass it directly since state may not be set yet
+    }
+  }, [studentId]);
+
   return (
     <>
       <UserDataInput
@@ -72,12 +83,13 @@ function LookUp() {
           setStudentID(value);
         }}
         actionWanted={(): void => {
-          searchStudentID();
+          searchStudentID(studentID);
         }}
         errorStateText={errorDescription}
         success={wasSuccess}
         successText={`Student ${studentID} has been found`}
         errorState={errorState}
+        value={studentId}
       />
       <div className="w-full max-w-md">
         {studentData && (

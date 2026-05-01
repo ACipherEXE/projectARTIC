@@ -26,6 +26,7 @@ function UserDataInput({
   errorStateText,
   success,
   successText,
+  value,
 }: UserDataInputProps) {
   return (
     <>
@@ -39,6 +40,7 @@ function UserDataInput({
               className="bg-white text-black"
               id="fieldgroup-name"
               placeholder={textboxPlaceholder}
+              value={value}
               onChange={(input) => onChange(input.target.value)}
               onKeyDown={(e) => {
                 e.key === "Enter" && actionWanted();

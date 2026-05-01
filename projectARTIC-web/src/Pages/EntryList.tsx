@@ -18,6 +18,7 @@ import type {
 import { formatDate, formatTime } from "../Function-Box/time-and-date";
 import { Button } from "../components/ui/button";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 /**
  *
@@ -29,6 +30,7 @@ function EntryList() {
   const [currentLimit, setCurrentLimit] = useState(25);
   const [currentPagination, setPagination] = useState<Pagination | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoading(true);
@@ -72,7 +74,10 @@ function EntryList() {
             <TableBody>
               {currentEntryList.map((entry, key) => (
                 <TableRow key={key}>
-                  <TableCell className="font-medium">
+                  <TableCell
+                    className="cursor-pointer hover:underline"
+                    onClick={() => navigate(`/look-up/${entry.studentid}`)}
+                  >
                     {entry.studentid}
                   </TableCell>
                   <TableCell>{entry.is_late ? "Yes" : "No"}</TableCell>
