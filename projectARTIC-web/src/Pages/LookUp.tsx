@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getStudentInfo } from "../API/time-entry-calls";
 import UserDataInput from "../components/custom/UserDataInput";
+import { searchStudentID } from "../Function-Box/studentCalls";
 import {
   Field,
   FieldGroup,
@@ -11,6 +12,7 @@ import {
 } from "../components/ui/field";
 import { Input } from "../components/ui/input";
 import { useParams } from "react-router-dom";
+import type { searchStudentIDCall } from "../interfaces/UserDataInput.types";
 
 /**
  *
@@ -25,30 +27,30 @@ function LookUp() {
   const [studentData, setStudentData] = useState(null);
   const { studentId } = useParams();
 
-  async function searchStudentID(studentIdPassed) {
-    try {
-      await getStudentInfo(studentIdPassed).then((result) => {
-        if (!result || Object.keys(result).length === 0) {
-          setErrorDescription("Student ID not found, try once more");
-          setWasSuccess(false);
-          setErrorState(true);
-          setStudentData(null);
-          return;
-        }
-        setErrorDescription(defaultErrorState);
-        setWasSuccess(true);
-        setErrorState(false);
-        setStudentData(result);
-        return;
-      });
-    } catch {
-      setErrorDescription(defaultErrorState);
-      setWasSuccess(false);
-      setErrorState(true);
-      setStudentData(null);
-      return;
-    }
-  }
+  // async function searchStudentID(studentIdPassed) {
+  //   try {
+  //     await getStudentInfo(studentIdPassed).then((result) => {
+  //       if (!result || Object.keys(result).length === 0) {
+  //         setErrorDescription("Student ID not found, try once more");
+  //         setWasSuccess(false);
+  //         setErrorState(true);
+  //         setStudentData(null);
+  //         return;
+  //       }
+  //       setErrorDescription(defaultErrorState);
+  //       setWasSuccess(true);
+  //       setErrorState(false);
+  //       setStudentData(result);
+  //       return;
+  //     });
+  //   } catch {
+  //     setErrorDescription(defaultErrorState);
+  //     setWasSuccess(false);
+  //     setErrorState(true);
+  //     setStudentData(null);
+  //     return;
+  //   }
+  // }
 
   // Timer to reset the output to normal
   useEffect(() => {
@@ -77,8 +79,16 @@ function LookUp() {
         onChange={(value: string): void => {
           setStudentIdInput(value);
         }}
-        actionWanted={(): void => {
-          searchStudentID(studentIdInput);
+        actionWanted={async (): Promise<void> => {
+          await searchStudentID(studentIdInput).then(
+            (result: searchStudentIDCall) => {
+              console.log("result", result);
+              setErrorDescription(result.errorDescription);
+              setWasSuccess(result.wasSuccess);
+              setErrorState(result.wasError);
+              setStudentData(result.studentData);
+            },
+          );
         }}
         errorStateText={errorDescription}
         success={wasSuccess}

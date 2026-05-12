@@ -36,3 +36,9 @@ export interface EntryLogResponse {
   data: Student[];
   pagination: Pagination[];
 }
+export interface searchStudentIDCall {
+  errorDescription: string;
+  wasSuccess: boolean;
+  wasError: boolean;
+  studentData: Student[];
+}
