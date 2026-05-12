@@ -13,6 +13,7 @@ import type { UserDataInputProps } from "../../interfaces/UserDataInput.types";
  * @param {boolean} errorState - A boolean you pass to tell the errorStateText to display
  * @param {string} successText - Text you want to display to user when a request was successful
  * @param {boolean} success - A boolean you pass to tell the successText to display
+ * @param {boolean} buttonInline - A way to put the UI orientation of the button and textbox side to side. Default is false.
  * @returns
  */
 function UserDataInput({
@@ -27,6 +28,7 @@ function UserDataInput({
   success,
   successText,
   value,
+  buttonInline = false,
 }: UserDataInputProps) {
   return (
     <>
@@ -36,29 +38,53 @@ function UserDataInput({
             <FieldLabel htmlFor="fieldgroup-name" className="text-white">
               {header ? header : "header"}
             </FieldLabel>
-            <Input
-              className="bg-white text-black"
-              id="fieldgroup-name"
-              placeholder={textboxPlaceholder}
-              value={value}
-              onChange={(input) => onChange(input.target.value)}
-              onKeyDown={(e) => {
-                e.key === "Enter" && actionWanted();
-              }}
-            />
+            {buttonInline ? (
+              <div className="flex gap-2">
+                <Input
+                  className="bg-white text-black"
+                  id="fieldgroup-name"
+                  placeholder={textboxPlaceholder}
+                  value={value}
+                  onChange={(input) => onChange(input.target.value)}
+                  onKeyDown={(e) => {
+                    e.key === "Enter" && actionWanted();
+                  }}
+                />
+                <Button
+                  className="bg-blue-500 hover:bg-blue-700 text-white px-6"
+                  type="submit"
+                  onClick={() => actionWanted()}
+                >
+                  {buttonText}
+                </Button>
+              </div>
+            ) : (
+              <Input
+                className="bg-white text-black"
+                id="fieldgroup-name"
+                placeholder={textboxPlaceholder}
+                value={value}
+                onChange={(input) => onChange(input.target.value)}
+                onKeyDown={(e) => {
+                  e.key === "Enter" && actionWanted();
+                }}
+              />
+            )}
             <FieldDescription className={errorState ? "text-red-500" : ""}>
               {errorState ? errorStateText : success ? successText : subText}
             </FieldDescription>
           </Field>
-          <Field orientation="horizontal">
-            <Button
-              className="bg-blue-500 hover:bg-blue-700 text-white px-6"
-              type="submit"
-              onClick={() => actionWanted()}
-            >
-              {buttonText}
-            </Button>
-          </Field>
+          {!buttonInline && (
+            <Field orientation="horizontal">
+              <Button
+                className="bg-blue-500 hover:bg-blue-700 text-white px-6"
+                type="submit"
+                onClick={() => actionWanted()}
+              >
+                {buttonText}
+              </Button>
+            </Field>
+          )}
         </FieldGroup>
       </div>
     </>

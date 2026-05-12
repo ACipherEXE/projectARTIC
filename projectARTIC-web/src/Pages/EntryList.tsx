@@ -19,6 +19,7 @@ import { formatDate, formatTime } from "../Function-Box/time-and-date";
 import { Button } from "../components/ui/button";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import UserDataInput from "../components/custom/UserDataInput";
 
 /**
  *
@@ -59,7 +60,23 @@ function EntryList() {
 
   return (
     <>
-      {!isLoading && currentEntryList.length > 0 && currentPagination && (
+      <UserDataInput
+        header={"Search by Student ID"}
+        // subText={"Enter a student ID to look up"}
+        buttonText={"Look Up"}
+        textboxPlaceholder={"EX: STU001"}
+        onChange={(value: string): void => {
+          // setStudentIdInput(value);
+        }}
+        actionWanted={(): void => {
+          // searchStudentID(studentIdInput);
+        }}
+        errorStateText={"errorDescription"}
+        successText={`Student ${"studentIdInput"} has been found`}
+        value={"studentIdInput"}
+        buttonInline={true}
+      />
+      {!isLoading && currentEntryList.length > 0 && currentPagination ? (
         <>
           <Table>
             <TableCaption>A list of student entries</TableCaption>
@@ -116,6 +133,8 @@ function EntryList() {
             </Button>
           </div>
         </>
+      ) : (
+        <>Something has gone wrong</>
       )}
     </>
   );
