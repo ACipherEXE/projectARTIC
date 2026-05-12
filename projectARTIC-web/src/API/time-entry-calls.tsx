@@ -13,12 +13,9 @@ function apiEndpontManager() {
  */
 export async function studentClockIn(studentId: string) {
   try {
-    return await fetch(
-      `${apiEndpontManager()}/time-entry?studentId=${studentId}`,
-      {
-        method: "POST",
-      },
-    ).then((response) => (response.status === 200 ? response.json() : {}));
+    return await fetch(`/api/time-entry?studentId=${studentId}`, {
+      method: "POST",
+    }).then((response) => (response.status === 200 ? response.json() : {}));
   } catch (error) {
     return {};
   }
@@ -44,7 +41,7 @@ export async function getEntryLogs({
   if (page) params.append("page", String(page));
   try {
     return await fetch(
-      `${apiEndpontManager()}/entry-logs${params.toString() ? `?${params.toString()}` : ""}`,
+      `/api/entry-logs${params.toString() ? `?${params.toString()}` : ""}`,
       {
         method: "GET",
       },
@@ -60,12 +57,9 @@ export async function getEntryLogs({
  */
 export async function getStudentInfo(studentId: string) {
   try {
-    return await fetch(
-      `${apiEndpontManager()}/student?studentId=${studentId}`,
-      {
-        method: "GET",
-      },
-    ).then((response) =>
+    return await fetch(`/api/student?studentId=${studentId}`, {
+      method: "GET",
+    }).then((response) =>
       response.status === 200
         ? response.json().then((data) => data[0] ?? {})
         : {},
