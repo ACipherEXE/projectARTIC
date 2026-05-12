@@ -4,7 +4,10 @@ A project a friend of mine want to see if possible, to do. The goal is to make a
 
 This project has been assited with Claude Sonnet 4.6
 
-The project is finished
+Is in very functional
+
+You will need node and postgress with pg admin
+A copy of the db is in the API folder called back up
 
 How to start:
 
