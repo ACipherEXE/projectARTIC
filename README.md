@@ -5,3 +5,15 @@ A project a friend of mine want to see if possible, to do. The goal is to make a
 This project has been assited with Claude Sonnet 4.6
 
 The project is finished
+
+How to start:
+
+on a terminal
+cd API
+npm install
+node api.js
+
+on a other terminal
+cd projectARTIC-web
+npm install
+nom run dev
