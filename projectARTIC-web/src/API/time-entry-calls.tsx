@@ -1,11 +1,3 @@
-import type { EntryLogResponse } from "../interfaces/UserDataInput.types";
-
-const localAPIEndpoint = "http://localhost:3001";
-
-//Function will handle multiple endpoints of the API depending on what state we want it
-function apiEndpontManager() {
-  return localAPIEndpoint;
-}
 /**
  * This API call is used to clock in the student in the system
  * @param {string} studentId - The students ID you want to pass
@@ -39,6 +31,7 @@ export async function getEntryLogs({
   const params = new URLSearchParams();
   if (limit) params.append("limit", String(limit));
   if (page) params.append("page", String(page));
+  if (studentId) params.append("page", String(studentId));
   try {
     return await fetch(
       `/api/entry-logs${params.toString() ? `?${params.toString()}` : ""}`,

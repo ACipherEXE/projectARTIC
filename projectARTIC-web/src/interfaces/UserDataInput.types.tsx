@@ -25,10 +25,10 @@ export interface Student {
   is_late: boolean;
 }
 export interface Pagination {
-  totalItems: number;
-  totalPages: number;
-  currentPage: number;
-  limit: number;
+  totalItems?: number;
+  totalPages?: number;
+  currentPage?: number;
+  limit?: number;
 }
 
 export interface EntryLogResponse {
