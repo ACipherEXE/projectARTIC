@@ -129,19 +129,18 @@ function EntryList() {
                     <ButtonGroup>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className="cursor-pointer "
-                            onClick={() =>
-                              navigate(`/look-up/${entry.studentid}`)
-                            }
-                          >
+                          <Button variant="outline" className="cursor-pointer ">
                             {entry.studentid}
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="bg-black shadow-md text-white">
                           <DropdownMenuGroup>
-                            <DropdownMenuItem className="cursor-pointer hover:underline">
+                            <DropdownMenuItem
+                              className="cursor-pointer hover:underline"
+                              onClick={() =>
+                                navigate(`/look-up/${entry.studentid}`)
+                              }
+                            >
                               Student Info
                             </DropdownMenuItem>
                             <DropdownMenuItem className="cursor-pointer hover:underline">
