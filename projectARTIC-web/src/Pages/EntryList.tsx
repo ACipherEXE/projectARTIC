@@ -44,13 +44,15 @@ function EntryList() {
   useEffect(() => {
     setIsLoading(true);
     setCurrentEntryList(null);
-    searchEntriesByStudentID({ limit: currentLimit, page: currentPage }).then(
-      (result: EntryLogResponse) => {
-        setCurrentEntryList(result.studentData);
-        setPagination(result.pagination);
-        setIsLoading(false);
-      },
-    );
+    searchEntriesByStudentID({
+      limit: currentLimit,
+      page: currentPage,
+      studentIdPassed: studentIdInput ? studentIdInput : "",
+    }).then((result: EntryLogResponse) => {
+      setCurrentEntryList(result.studentData);
+      setPagination(result.pagination);
+      setIsLoading(false);
+    });
   }, [currentLimit, currentPage]);
 
   function changePage(direction: "next" | "prev") {
@@ -83,8 +85,6 @@ function EntryList() {
             studentIdPassed: studentIdInput,
           }).then((result: EntryLogResponse) => {
             setIsLoading(true);
-
-            console.log(result.studentData);
             setCurrentEntryList(result.studentData);
             setPagination(result.pagination);
             setIsLoading(false);

@@ -56,7 +56,6 @@ function LookUp() {
         actionWanted={async (): Promise<void> => {
           await searchStudentID(studentIdInput).then(
             (result: searchStudentIDCall) => {
-              console.log("result", result);
               setErrorDescription(result.errorDescription);
               setWasSuccess(result.wasSuccess);
               setErrorState(result.wasError);

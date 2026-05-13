@@ -58,7 +58,6 @@ export async function searchEntriesByStudentID({
       page: page,
       studentId: studentIdPassed,
     }).then((result: EntryLogResponse) => {
-      console.log(result);
       if (!result || Object.keys(result).length === 0) {
         return {
           errorDescription: "Student ID not found, try once more",
