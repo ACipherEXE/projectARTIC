@@ -31,10 +31,15 @@ export interface Pagination {
   currentPage?: number;
   limit?: number;
 }
-
+// FIX: I messed up as the API is returning as data and not data and this is being used in the toolbox. This will need to be fixed but for now its works as intended
 export interface EntryLogResponse {
+  studentData: Student[];
   data: Student[];
-  pagination: Pagination[];
+  pagination: Pagination;
+  errorDescription: string;
+  wasSuccess: boolean;
+  wasError: boolean;
+  isLoading: boolean;
 }
 export interface searchStudentIDCall {
   errorDescription: string;

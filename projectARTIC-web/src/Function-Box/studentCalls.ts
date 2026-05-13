@@ -42,11 +42,15 @@ export async function searchStudentID(studentIdPassed) {
  * @param {string} studentIdPassed - The passed student ID (Optional)
  * @returns A JSON full of error handleing, student entries and pagination
  */
-export async function searchEntriesByStudentID(
-  limit: number,
-  page: number,
-  studentIdPassed?: string,
-) {
+export async function searchEntriesByStudentID({
+  limit,
+  page,
+  studentIdPassed,
+}: {
+  limit: number;
+  page: number;
+  studentIdPassed?: string;
+}) {
   const defaultErrorState = "Something went wrong, try once more";
   try {
     return await getEntryLogs({
@@ -54,6 +58,7 @@ export async function searchEntriesByStudentID(
       page: page,
       studentId: studentIdPassed,
     }).then((result: EntryLogResponse) => {
+      console.log(result);
       if (!result || Object.keys(result).length === 0) {
         return {
           errorDescription: "Student ID not found, try once more",

@@ -9,7 +9,6 @@ import {
   TableFooter,
   Table,
 } from "../components/ui/table";
-import { getEntryLogs } from "../API/time-entry-calls";
 import type {
   EntryLogResponse,
   Pagination,
@@ -20,6 +19,8 @@ import { Button } from "../components/ui/button";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import UserDataInput from "../components/custom/UserDataInput";
+import { searchEntriesByStudentID } from "../Function-Box/studentCalls";
+import { useParams } from "react-router-dom";
 
 /**
  *
@@ -31,14 +32,21 @@ function EntryList() {
   const [currentLimit, setCurrentLimit] = useState(25);
   const [currentPagination, setPagination] = useState<Pagination | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [studentIdInput, setStudentIdInput] = useState("");
+  const [errorState, setErrorState] = useState(false);
+  const defaultErrorState = "Something went wrong, try once more";
+  const [errorDescription, setErrorDescription] = useState(defaultErrorState);
+  const [wasSuccess, setWasSuccess] = useState(false);
+  const [studentData, setStudentData] = useState(null);
+  const { studentId } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoading(true);
     setCurrentEntryList(null);
-    getEntryLogs({ limit: currentLimit, page: currentPage }).then(
+    searchEntriesByStudentID({ limit: currentLimit, page: currentPage }).then(
       (result: EntryLogResponse) => {
-        setCurrentEntryList(result.data);
+        setCurrentEntryList(result.studentData);
         setPagination(result.pagination);
         setIsLoading(false);
       },
@@ -66,14 +74,25 @@ function EntryList() {
         buttonText={"Look Up"}
         textboxPlaceholder={"EX: STU001"}
         onChange={(value: string): void => {
-          // setStudentIdInput(value);
+          setStudentIdInput(value);
         }}
         actionWanted={(): void => {
-          // searchStudentID(studentIdInput);
+          searchEntriesByStudentID({
+            limit: currentLimit,
+            page: currentPage,
+            studentIdPassed: studentIdInput,
+          }).then((result: EntryLogResponse) => {
+            setIsLoading(true);
+
+            console.log(result.studentData);
+            setCurrentEntryList(result.studentData);
+            setPagination(result.pagination);
+            setIsLoading(false);
+          });
         }}
         errorStateText={"errorDescription"}
-        successText={`Student ${"studentIdInput"} has been found`}
-        value={"studentIdInput"}
+        successText={`Student ${studentIdInput} has been found`}
+        value={studentIdInput}
         buttonInline={true}
       />
       {!isLoading && currentEntryList.length > 0 && currentPagination ? (

@@ -26,3 +26,5 @@ export default defineConfig({
     },
   },
 });
+
+// I made this project because I am despreate for a full time job. This is proof that I am slowly building something that may be for nothing but at least I am learning for whoever will start asking questions.
