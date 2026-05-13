@@ -39,7 +39,12 @@ function LookUp() {
   useEffect(() => {
     if (studentId) {
       setStudentIdInput(studentId);
-      searchStudentID(studentId); // pass it directly since state may not be set yet
+      searchStudentID(studentId).then((result: searchStudentIDCall) => {
+        setErrorDescription(result.errorDescription);
+        setWasSuccess(result.wasSuccess);
+        setErrorState(result.wasError);
+        setStudentData(result.studentData);
+      }); // pass it directly since state may not be set yet
     }
   }, [studentId]);
 
