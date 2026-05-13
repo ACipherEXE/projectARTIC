@@ -11,6 +11,7 @@ export interface UserDataInputProps {
   successText: string;
   value?: string;
   buttonInline?: boolean;
+  shouldButtonBeShown?: boolean;
 }
 export interface Student {
   student_uuid: string;

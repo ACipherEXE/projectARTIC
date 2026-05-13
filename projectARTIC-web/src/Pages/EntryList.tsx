@@ -50,24 +50,32 @@ function EntryList() {
   const [errorState, setErrorState] = useState(false);
   const defaultErrorState = "Something went wrong, try once more";
   const [errorDescription, setErrorDescription] = useState(defaultErrorState);
-  const [wasSuccess, setWasSuccess] = useState(false);
-  const [studentData, setStudentData] = useState(null);
+
   const { studentId } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    setIsLoading(true);
-    setCurrentEntryList(null);
-    searchEntriesByStudentID({
-      limit: currentLimit,
-      page: currentPage,
-      studentIdPassed: studentIdInput ? studentIdInput : "",
-    }).then((result: EntryLogResponse) => {
-      setCurrentEntryList(result.studentData);
-      setPagination(result.pagination);
-      setIsLoading(false);
-    });
-  }, [currentLimit, currentPage]);
+    if (studentId) {
+      setStudentIdInput(studentId);
+    }
+  }, []);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsLoading(true);
+      setCurrentEntryList(null);
+      searchEntriesByStudentID({
+        limit: currentLimit,
+        page: currentPage,
+        studentIdPassed: studentIdInput ? studentIdInput : "",
+      }).then((result: EntryLogResponse) => {
+        setCurrentEntryList(result.studentData);
+        setPagination(result.pagination);
+        setIsLoading(false);
+      });
+    }, 700);
+    // The user is typing we want to delay the API calls as without this it would call the API evey keystroke, we would like the to give the API some rest XD
+    return () => clearTimeout(timeout);
+  }, [currentLimit, currentPage, studentIdInput]);
 
   function changePage(direction: "next" | "prev") {
     if (direction === "prev" && currentPage > 1) {
@@ -92,22 +100,11 @@ function EntryList() {
         onChange={(value: string): void => {
           setStudentIdInput(value);
         }}
-        actionWanted={(): void => {
-          searchEntriesByStudentID({
-            limit: currentLimit,
-            page: currentPage,
-            studentIdPassed: studentIdInput,
-          }).then((result: EntryLogResponse) => {
-            setIsLoading(true);
-            setCurrentEntryList(result.studentData);
-            setPagination(result.pagination);
-            setIsLoading(false);
-          });
-        }}
         errorStateText={"errorDescription"}
         successText={`Student ${studentIdInput} has been found`}
         value={studentIdInput}
         buttonInline={true}
+        shouldButtonBeShown={false}
       />
 
       {!isLoading && currentEntryList.length > 0 && currentPagination ? (
@@ -143,7 +140,12 @@ function EntryList() {
                             >
                               Student Info
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="cursor-pointer hover:underline">
+                            <DropdownMenuItem
+                              className="cursor-pointer hover:underline"
+                              onClick={() =>
+                                navigate(`/entry-list/${entry.studentid}`)
+                              }
+                            >
                               Entries
                             </DropdownMenuItem>
                           </DropdownMenuGroup>
@@ -188,7 +190,13 @@ function EntryList() {
           </div>
         </>
       ) : (
-        <>Something has gone wrong</>
+        <>
+          {currentEntryList?.length === 0 || currentEntryList === null ? (
+            <>Student ID might be wrong. Type the full ID</>
+          ) : (
+            <>Something has gone wrong</>
+          )}
+        </>
       )}
     </>
   );

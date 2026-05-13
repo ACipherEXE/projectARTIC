@@ -14,7 +14,8 @@ import type { UserDataInputProps } from "../../interfaces/UserDataInput.types";
  * @param {string} successText - Text you want to display to user when a request was successful
  * @param {boolean} success - A boolean you pass to tell the successText to display
  * @param {boolean} buttonInline - A way to put the UI orientation of the button and textbox side to side. Default is false.
- * @returns
+ * @param {boolean} shouldButtonBeShown - A way to put the away the UI button. Default is true.
+ * @returns - Display component
  */
 function UserDataInput({
   header,
@@ -29,6 +30,7 @@ function UserDataInput({
   successText,
   value,
   buttonInline = false,
+  shouldButtonBeShown = true,
 }: UserDataInputProps) {
   return (
     <>
@@ -50,13 +52,15 @@ function UserDataInput({
                     e.key === "Enter" && actionWanted();
                   }}
                 />
-                <Button
-                  className="bg-blue-500 hover:bg-blue-700 text-white px-6"
-                  type="submit"
-                  onClick={() => actionWanted()}
-                >
-                  {buttonText}
-                </Button>
+                {shouldButtonBeShown && (
+                  <Button
+                    className="bg-blue-500 hover:bg-blue-700 text-white px-6"
+                    type="submit"
+                    onClick={() => actionWanted()}
+                  >
+                    {buttonText}
+                  </Button>
+                )}
               </div>
             ) : (
               <Input
@@ -74,7 +78,7 @@ function UserDataInput({
               {errorState ? errorStateText : success ? successText : subText}
             </FieldDescription>
           </Field>
-          {!buttonInline && (
+          {!buttonInline && shouldButtonBeShown && (
             <Field orientation="horizontal">
               <Button
                 className="bg-blue-500 hover:bg-blue-700 text-white px-6"
