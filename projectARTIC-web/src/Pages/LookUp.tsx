@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { getStudentInfo } from "../API/time-entry-calls";
 import UserDataInput from "../components/custom/UserDataInput";
 import { searchStudentID } from "../Function-Box/studentCalls";
 import {
@@ -26,31 +25,6 @@ function LookUp() {
   const [wasSuccess, setWasSuccess] = useState(false);
   const [studentData, setStudentData] = useState(null);
   const { studentId } = useParams();
-
-  // async function searchStudentID(studentIdPassed) {
-  //   try {
-  //     await getStudentInfo(studentIdPassed).then((result) => {
-  //       if (!result || Object.keys(result).length === 0) {
-  //         setErrorDescription("Student ID not found, try once more");
-  //         setWasSuccess(false);
-  //         setErrorState(true);
-  //         setStudentData(null);
-  //         return;
-  //       }
-  //       setErrorDescription(defaultErrorState);
-  //       setWasSuccess(true);
-  //       setErrorState(false);
-  //       setStudentData(result);
-  //       return;
-  //     });
-  //   } catch {
-  //     setErrorDescription(defaultErrorState);
-  //     setWasSuccess(false);
-  //     setErrorState(true);
-  //     setStudentData(null);
-  //     return;
-  //   }
-  // }
 
   // Timer to reset the output to normal
   useEffect(() => {
