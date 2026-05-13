@@ -31,7 +31,7 @@ export async function getEntryLogs({
   const params = new URLSearchParams();
   if (limit) params.append("limit", String(limit));
   if (page) params.append("page", String(page));
-  if (studentId) params.append("page", String(studentId));
+  if (studentId) params.append("studentId", String(studentId));
   try {
     return await fetch(
       `/api/entry-logs${params.toString() ? `?${params.toString()}` : ""}`,
