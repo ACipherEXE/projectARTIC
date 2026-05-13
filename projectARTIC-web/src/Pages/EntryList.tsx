@@ -21,6 +21,20 @@ import { useNavigate } from "react-router-dom";
 import UserDataInput from "../components/custom/UserDataInput";
 import { searchEntriesByStudentID } from "../Function-Box/studentCalls";
 import { useParams } from "react-router-dom";
+import { ButtonGroup } from "../components/ui/button-group";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "../components/ui/dropdown-menu";
 
 /**
  *
@@ -95,6 +109,7 @@ function EntryList() {
         value={studentIdInput}
         buttonInline={true}
       />
+
       {!isLoading && currentEntryList.length > 0 && currentPagination ? (
         <>
           <Table>
@@ -110,11 +125,32 @@ function EntryList() {
             <TableBody>
               {currentEntryList.map((entry, key) => (
                 <TableRow key={key}>
-                  <TableCell
-                    className="cursor-pointer hover:underline"
-                    onClick={() => navigate(`/look-up/${entry.studentid}`)}
-                  >
-                    {entry.studentid}
+                  <TableCell className="cursor-pointer">
+                    <ButtonGroup>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="cursor-pointer "
+                            onClick={() =>
+                              navigate(`/look-up/${entry.studentid}`)
+                            }
+                          >
+                            {entry.studentid}
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="bg-black shadow-md text-white">
+                          <DropdownMenuGroup>
+                            <DropdownMenuItem className="cursor-pointer hover:underline">
+                              Student Info
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="cursor-pointer hover:underline">
+                              Entries
+                            </DropdownMenuItem>
+                          </DropdownMenuGroup>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </ButtonGroup>
                   </TableCell>
                   <TableCell>{entry.is_late ? "Yes" : "No"}</TableCell>
                   <TableCell>{formatTime(entry.time)}</TableCell>
