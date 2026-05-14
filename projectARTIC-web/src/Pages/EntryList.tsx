@@ -55,13 +55,14 @@ function EntryList() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    setIsLoading(true);
     if (studentId) {
       setStudentIdInput(studentId);
     }
-  }, []);
+  }, [studentId]);
   useEffect(() => {
+    setIsLoading(true);
     const timeout = setTimeout(() => {
-      setIsLoading(true);
       setCurrentEntryList(null);
       searchEntriesByStudentID({
         limit: currentLimit,
@@ -190,13 +191,7 @@ function EntryList() {
           </div>
         </>
       ) : (
-        <>
-          {currentEntryList?.length === 0 || currentEntryList === null ? (
-            <>Student ID might be wrong. Type the full ID</>
-          ) : (
-            <>Something has gone wrong</>
-          )}
-        </>
+        <>{isLoading && <>Loading</>}</>
       )}
     </>
   );
