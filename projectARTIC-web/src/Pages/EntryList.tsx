@@ -50,7 +50,7 @@ function EntryList() {
   const [errorState, setErrorState] = useState(false);
   const defaultErrorState = "Something went wrong, try once more";
   const [errorDescription, setErrorDescription] = useState(defaultErrorState);
-
+  const [wasSuccess, setWasSuccess] = useState(false);
   const { studentId } = useParams();
   const navigate = useNavigate();
 
@@ -69,9 +69,11 @@ function EntryList() {
         page: currentPage,
         studentIdPassed: studentIdInput ? studentIdInput : "",
       }).then((result: EntryLogResponse) => {
-        setCurrentEntryList(result.studentData);
-        setPagination(result.pagination);
-        setIsLoading(false);
+        if (result.studentData !== null) {
+          setCurrentEntryList(result.studentData);
+          setPagination(result.pagination);
+          setIsLoading(false);
+        }
       });
     }, 700);
     // The user is typing we want to delay the API calls as without this it would call the API evey keystroke, we would like the to give the API some rest XD
@@ -106,6 +108,8 @@ function EntryList() {
         value={studentIdInput}
         buttonInline={true}
         shouldButtonBeShown={false}
+        success={wasSuccess}
+        errorState={errorState}
       />
 
       {!isLoading && currentEntryList.length > 0 && currentPagination ? (
