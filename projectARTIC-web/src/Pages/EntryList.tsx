@@ -21,6 +21,20 @@ import { useNavigate } from "react-router-dom";
 import UserDataInput from "../components/custom/UserDataInput";
 import { searchEntriesByStudentID } from "../Function-Box/studentCalls";
 import { useParams } from "react-router-dom";
+import { ButtonGroup } from "../components/ui/button-group";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "../components/ui/dropdown-menu";
 
 /**
  *
@@ -37,23 +51,33 @@ function EntryList() {
   const defaultErrorState = "Something went wrong, try once more";
   const [errorDescription, setErrorDescription] = useState(defaultErrorState);
   const [wasSuccess, setWasSuccess] = useState(false);
-  const [studentData, setStudentData] = useState(null);
   const { studentId } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoading(true);
-    setCurrentEntryList(null);
-    searchEntriesByStudentID({
-      limit: currentLimit,
-      page: currentPage,
-      studentIdPassed: studentIdInput ? studentIdInput : "",
-    }).then((result: EntryLogResponse) => {
-      setCurrentEntryList(result.studentData);
-      setPagination(result.pagination);
-      setIsLoading(false);
-    });
-  }, [currentLimit, currentPage]);
+    if (studentId) {
+      setStudentIdInput(studentId);
+    }
+  }, [studentId]);
+  useEffect(() => {
+    setIsLoading(true);
+    const timeout = setTimeout(() => {
+      searchEntriesByStudentID({
+        limit: currentLimit,
+        page: currentPage,
+        studentIdPassed: studentIdInput ? studentIdInput : "",
+      }).then((result: EntryLogResponse) => {
+        if (result.studentData !== null) {
+          setCurrentEntryList(result.studentData);
+          setPagination(result.pagination);
+        }
+        setIsLoading(false);
+      });
+    }, 700);
+    // The user is typing we want to delay the API calls as without this it would call the API evey keystroke, we would like the to give the API some rest XD
+    return () => clearTimeout(timeout);
+  }, [currentLimit, currentPage, studentIdInput]);
 
   function changePage(direction: "next" | "prev") {
     if (direction === "prev" && currentPage > 1) {
@@ -78,23 +102,15 @@ function EntryList() {
         onChange={(value: string): void => {
           setStudentIdInput(value);
         }}
-        actionWanted={(): void => {
-          searchEntriesByStudentID({
-            limit: currentLimit,
-            page: currentPage,
-            studentIdPassed: studentIdInput,
-          }).then((result: EntryLogResponse) => {
-            setIsLoading(true);
-            setCurrentEntryList(result.studentData);
-            setPagination(result.pagination);
-            setIsLoading(false);
-          });
-        }}
         errorStateText={"errorDescription"}
         successText={`Student ${studentIdInput} has been found`}
         value={studentIdInput}
         buttonInline={true}
+        shouldButtonBeShown={false}
+        success={wasSuccess}
+        errorState={errorState}
       />
+
       {!isLoading && currentEntryList.length > 0 && currentPagination ? (
         <>
           <Table>
@@ -110,11 +126,36 @@ function EntryList() {
             <TableBody>
               {currentEntryList.map((entry, key) => (
                 <TableRow key={key}>
-                  <TableCell
-                    className="cursor-pointer hover:underline"
-                    onClick={() => navigate(`/look-up/${entry.studentid}`)}
-                  >
-                    {entry.studentid}
+                  <TableCell className="cursor-pointer">
+                    <ButtonGroup>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline" className="cursor-pointer ">
+                            {entry.studentid}
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="bg-black shadow-md text-white">
+                          <DropdownMenuGroup>
+                            <DropdownMenuItem
+                              className="cursor-pointer hover:underline"
+                              onClick={() =>
+                                navigate(`/look-up/${entry.studentid}`)
+                              }
+                            >
+                              Student Info
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              className="cursor-pointer hover:underline"
+                              onClick={() =>
+                                navigate(`/entry-list/${entry.studentid}`)
+                              }
+                            >
+                              Entries
+                            </DropdownMenuItem>
+                          </DropdownMenuGroup>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </ButtonGroup>
                   </TableCell>
                   <TableCell>{entry.is_late ? "Yes" : "No"}</TableCell>
                   <TableCell>{formatTime(entry.time)}</TableCell>
@@ -153,7 +194,7 @@ function EntryList() {
           </div>
         </>
       ) : (
-        <>Something has gone wrong</>
+        <>{isLoading && <>Loading</>}</>
       )}
     </>
   );
