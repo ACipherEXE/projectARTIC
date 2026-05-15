@@ -63,7 +63,6 @@ function EntryList() {
   useEffect(() => {
     setIsLoading(true);
     const timeout = setTimeout(() => {
-      setCurrentEntryList(null);
       searchEntriesByStudentID({
         limit: currentLimit,
         page: currentPage,
@@ -72,8 +71,8 @@ function EntryList() {
         if (result.studentData !== null) {
           setCurrentEntryList(result.studentData);
           setPagination(result.pagination);
-          setIsLoading(false);
         }
+        setIsLoading(false);
       });
     }, 700);
     // The user is typing we want to delay the API calls as without this it would call the API evey keystroke, we would like the to give the API some rest XD
